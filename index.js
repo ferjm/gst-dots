@@ -32,8 +32,11 @@ chokidar.watch((dotDir ? dotDir : '.') + '/*dot').on('all', async (event, dotFil
 });
 
 chokidar.watch('public/svg/*svg').on('all', async (event, path) => {
-    dots.push(path.replace('public/', ''));
-    liveReloadServer.refresh("/");
+    const svg = path.replace('public/', '');
+    if (dots.indexOf(svg) < 0) {
+        dots.push(svg);
+        liveReloadServer.refresh("/");
+    }
 });
 
 app.listen(3000, () => {
