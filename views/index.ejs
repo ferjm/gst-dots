@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GstDots</title>
+  </head>
+  <body>
+    <h1>GStreamer Pipeline graphs</h1>
+    <% dots.forEach(function(dot) { %>
+    	<h3><%=dot%></h3>
+	<a href="<%=dot%>"><img src="<%=dot%>" alt="image" width="800"></a>
+    <% })%>
+    <script>
+        window.addEventListener('DOMContenLoaded', () => {
+	        window.scrollTo(0,document.querySelector(".scrollingContainer").scrollHeight);
+        });
+    </script> 
+  </body>
+</html>
