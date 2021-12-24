@@ -23,20 +23,29 @@ app.get('', (req, res) => {
 const dotDir = process.env.GST_DEBUG_DUMP_DOT_DIR;
 const svgDir = './public/svg/';
 
-fs.rmdirSync(svgDir, { recursive: true });
+if (fs.existsSync(svgDir)) {
+    fs.rmSync(svgDir, { recursive: true });
+}
 fs.mkdirSync(svgDir);
 chokidar.watch((dotDir ? dotDir : '.') + '/*dot').on('all', async (event, dotFile) => {
     const out = svgDir + path.basename(dotFile).replace('.dot', '.svg');
 
-    spawn('dot', ['-Tsvg', dotFile, '-o', out]);
+    if (event == 'add') {
+        spawn('dot', ['-Tsvg', dotFile, '-o', out]);
+    } else if (event == 'unlink' && fs.existsSync(out)) {
+        fs.rmSync(out);
+    }
 });
 
 chokidar.watch('public/svg/*svg').on('all', async (event, path) => {
     const svg = path.replace('public/', '');
-    if (dots.indexOf(svg) < 0) {
+    const index = dots.indexOf(svg);
+    if (event == 'add' && index < 0) {
         dots.push(svg);
-        liveReloadServer.refresh("/");
+    } else if (event == 'unlink' && index >= 0) {
+        dots.splice(index, 1);
     }
+    liveReloadServer.refresh("/");
 });
 
 app.listen(3000, () => {
