@@ -24,7 +24,7 @@ const dotDir = process.env.GST_DEBUG_DUMP_DOT_DIR;
 const svgDir = './public/svg/';
 
 if (fs.existsSync(svgDir)) {
-    fs.rmdirSync(svgDir, { recursive: true });
+    fs.rmSync(svgDir, { recursive: true });
 }
 fs.mkdirSync(svgDir);
 chokidar.watch((dotDir ? dotDir : '.') + '/*dot').on('all', async (event, dotFile) => {
