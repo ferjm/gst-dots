@@ -23,7 +23,9 @@ app.get('', (req, res) => {
 const dotDir = process.env.GST_DEBUG_DUMP_DOT_DIR;
 const svgDir = './public/svg/';
 
-fs.rmdirSync(svgDir, { recursive: true });
+if (fs.existsSync(svgDir)) {
+    fs.rmdirSync(svgDir, { recursive: true });
+}
 fs.mkdirSync(svgDir);
 chokidar.watch((dotDir ? dotDir : '.') + '/*dot').on('all', async (event, dotFile) => {
     const out = svgDir + path.basename(dotFile).replace('.dot', '.svg');
